@@ -549,13 +549,17 @@ ul { list-style: none; }
   opacity: 0.4;
 }
 
-.about-text .section-tag { text-align: left; display: block; }
+.about-text .section-tag {
+  text-align: center;
+  display: block;
+}
 
 .about-text h2 {
   font-family: var(--font-head);
   font-size: clamp(1.8rem, 3vw, 2.4rem);
   color: var(--green);
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .about-text p {
@@ -563,6 +567,7 @@ ul { list-style: none; }
   color: var(--text-soft);
   margin-bottom: 16px;
   line-height: 1.8;
+  text-align: center;
 }
 
 .about-tags {
@@ -570,6 +575,7 @@ ul { list-style: none; }
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 24px;
+  justify-content: center;
 }
 
 .about-tags span {
