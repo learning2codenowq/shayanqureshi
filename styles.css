@@ -588,6 +588,12 @@ ul { list-style: none; }
   border: 1px solid var(--sand-dark);
 }
 
+.about-tags span:nth-child(2) {
+  background: var(--green);
+  color: var(--sand);
+  border-color: var(--green);
+}
+
 /* ============================================
    TESTIMONIALS
 ============================================ */
