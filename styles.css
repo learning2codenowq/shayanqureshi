@@ -516,9 +516,11 @@ ul { list-style: none; }
 
 .about-container {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 64px;
+  grid-template-columns: 1fr;
+  gap: 0;
   align-items: center;
+  max-width: 720px;
+  margin: 0 auto;
 }
 
 .about-photo-placeholder {
@@ -794,6 +796,15 @@ ul { list-style: none; }
   font-size: 0.88rem;
   color: var(--text-soft);
   margin-bottom: 32px;
+}
+
+.pricing-frequency {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--green);
+  letter-spacing: 0.04em;
+  margin-bottom: 32px;
+  margin-top: -20px;
 }
 
 .pricing-includes {
