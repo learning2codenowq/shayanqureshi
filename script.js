@@ -84,7 +84,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 /* ============================================
-   STAGGERED ANIMATION DELAYS — trust bar + cards
+   STAGGERED ANIMATION DELAYS — cards
 ============================================ */
 document.querySelectorAll('.programs-grid .program-card').forEach((card, i) => {
   card.style.transitionDelay = `${i * 0.08}s`;
@@ -93,6 +93,7 @@ document.querySelectorAll('.programs-grid .program-card').forEach((card, i) => {
 document.querySelectorAll('.testimonials-grid .testimonial-card').forEach((card, i) => {
   card.style.transitionDelay = `${i * 0.08}s`;
 });
+
 /* ============================================
    RESOURCES FORM
 ============================================ */
@@ -103,19 +104,21 @@ const submitBtn = document.getElementById('resourcesSubmit');
 const formError = document.getElementById('form-error');
 
 function unlockResources() {
-  // Hide form, show success
-  document.getElementById('resourcesFormWrap').style.display = 'none';
-  document.getElementById('resourcesSuccess') && (document.getElementById('resourcesSuccess').style.display = 'block');
+  // Hide form wrap, show success message inside card
+  document.getElementById('resourcesForm').style.display = 'none';
+  document.getElementById('resourcesSuccess').style.display = 'block';
 
   // Unlock resource cards
-  document.querySelectorAll('.resource-lock').forEach(lock => lock.classList.add('hidden'));
+  document.querySelectorAll('.resource-lock').forEach(lock => {
+    lock.classList.add('hidden');
+  });
   document.querySelectorAll('.resource-btn').forEach(btn => {
     btn.classList.add('unlocked');
     btn.style.display = 'block';
   });
 
   // Smooth scroll to cards
-  document.getElementById('resources').scrollIntoView({ behavior: 'smooth' });
+  document.querySelector('.resource-cards').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function showError(msg) {
@@ -123,45 +126,43 @@ function showError(msg) {
   formError.style.display = 'block';
 }
 
-submitBtn.addEventListener('click', async () => {
-  const name = document.getElementById('res-name').value.trim();
-  const email = document.getElementById('res-email').value.trim();
-  const whatsapp = document.getElementById('res-whatsapp').value.trim();
-  const agreed = document.getElementById('res-agree').checked;
+if (submitBtn) {
+  submitBtn.addEventListener('click', async () => {
+    const name = document.getElementById('res-name').value.trim();
+    const email = document.getElementById('res-email').value.trim();
+    const whatsapp = document.getElementById('res-whatsapp').value.trim();
+    const agreed = document.getElementById('res-agree').checked;
 
-  // Reset error
-  formError.style.display = 'none';
+    // Reset error
+    formError.style.display = 'none';
 
-  // Validate
-  if (!name) return showError('Please enter your full name.');
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email address.');
-  if (!agreed) return showError('Please agree to receive updates to unlock the resources.');
+    // Validate
+    if (!name) return showError('Please enter your full name.');
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email address.');
+    if (!agreed) return showError('Please agree to receive updates to unlock the resources.');
 
-  // Disable button
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Unlocking...';
+    // Disable button
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Unlocking...';
 
-  try {
-    // Get reCAPTCHA token
-    const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
+    try {
+      // Get reCAPTCHA token
+      const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
 
-    // Submit to Google Apps Script
-    const res = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify({ name, email, whatsapp, agreed, token }),
-    });
+      // Submit to Google Apps Script — fire and forget
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ name, email, whatsapp, agreed, token }),
+      });
 
-    const result = await res.json();
-
-    if (result.success) {
+      // Unlock immediately — don't wait for response
       unlockResources();
-    } else {
-      showError('Something went wrong. Please try again.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Unlock Resources';
+
+    } catch (err) {
+      // Still unlock even if something fails — don't penalise the user
+      unlockResources();
     }
-  } catch (err) {
-    // If script fails, still unlock — don't block the user
-    unlockResources();
-  }
-});
+  });
+}
