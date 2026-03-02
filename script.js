@@ -104,11 +104,9 @@ const submitBtn = document.getElementById('resourcesSubmit');
 const formError = document.getElementById('form-error');
 
 function unlockResources() {
-  // Hide form wrap, show success message inside card
   document.getElementById('resourcesForm').style.display = 'none';
   document.getElementById('resourcesSuccess').style.display = 'block';
 
-  // Unlock resource cards
   document.querySelectorAll('.resource-lock').forEach(lock => {
     lock.classList.add('hidden');
   });
@@ -117,13 +115,44 @@ function unlockResources() {
     btn.style.display = 'block';
   });
 
-  // Smooth scroll to cards
   document.querySelector('.resource-cards').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function showError(msg) {
   formError.textContent = msg;
   formError.style.display = 'block';
+}
+
+function sendToSheet(name, email, whatsapp, agreed, token) {
+  // Create a hidden iframe to handle the response
+  const iframe = document.createElement('iframe');
+  iframe.name = 'hidden-iframe';
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+
+  // Create a hidden form
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = SCRIPT_URL;
+  form.target = 'hidden-iframe';
+
+  const fields = { name, email, whatsapp, agreed, token };
+  Object.entries(fields).forEach(([key, value]) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+
+  // Clean up after submission
+  setTimeout(() => {
+    document.body.removeChild(form);
+    document.body.removeChild(iframe);
+  }, 5000);
 }
 
 if (submitBtn) {
@@ -133,35 +162,20 @@ if (submitBtn) {
     const whatsapp = document.getElementById('res-whatsapp').value.trim();
     const agreed = document.getElementById('res-agree').checked;
 
-    // Reset error
     formError.style.display = 'none';
 
-    // Validate
     if (!name) return showError('Please enter your full name.');
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return showError('Please enter a valid email address.');
     if (!agreed) return showError('Please agree to receive updates to unlock the resources.');
 
-    // Disable button
     submitBtn.disabled = true;
     submitBtn.textContent = 'Unlocking...';
 
     try {
-      // Get reCAPTCHA token
       const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'submit' });
-
-      // Submit to Google Apps Script — fire and forget
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify({ name, email, whatsapp, agreed, token }),
-      });
-
-      // Unlock immediately — don't wait for response
+      sendToSheet(name, email, whatsapp, agreed, token);
       unlockResources();
-
     } catch (err) {
-      // Still unlock even if something fails — don't penalise the user
       unlockResources();
     }
   });
