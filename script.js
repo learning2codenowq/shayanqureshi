@@ -97,7 +97,7 @@ document.querySelectorAll('.testimonials-grid .testimonial-card').forEach((card,
 /* ============================================
    RESOURCES FORM
 ============================================ */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMbj1HRavExCImm39u_dwzOXbAwQyV6vY4JoW2Rf5nRKxGiadNQ1Ds2NwlmNTlDOrqJw/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzb7gHAJLOH58f3Knm9FmItPnpW1rO3x9_lKXPoJcsSW0VEdesL-dt490ML6DlGnJILg/exec';
 const RECAPTCHA_SITE_KEY = '6LcHCn0sAAAAAEVEgqRjkOpVDIcthP-Q4h5Y7USW';
 
 const submitBtn = document.getElementById('resourcesSubmit');
