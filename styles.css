@@ -743,9 +743,15 @@ ul { list-style: none; }
   border-radius: 20px;
   padding: 48px 40px;
   text-align: center;
-  box-shadow: var(--shadow);
+  box-shadow: 0 8px 40px rgba(44, 74, 62, 0.15), 0 0 0 1px rgba(44, 74, 62, 0.06);
   position: relative;
   overflow: hidden;
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
+}
+
+.pricing-card:hover {
+  box-shadow: 0 16px 60px rgba(44, 74, 62, 0.22), 0 0 0 1px rgba(44, 74, 62, 0.10);
+  transform: translateY(-4px);
 }
 
 .pricing-card::before {
@@ -1315,4 +1321,212 @@ ul { list-style: none; }
 @media (max-width: 768px) {
   .form-row { grid-template-columns: 1fr; }
   .resources-form-card { padding: 28px 20px; }
+}
+/* ============================================
+   RECITATION PLAYER
+============================================ */
+.recitation-player {
+  background: var(--sand);
+  border: 1px solid var(--sand-dark);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin: 28px auto 24px;
+  max-width: 520px;
+}
+
+.recitation-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 10px;
+}
+
+.recitation-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 16px;
+}
+
+.recitation-surah {
+  font-family: var(--font-head);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--green);
+}
+
+.recitation-reciter {
+  font-size: 0.82rem;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.recitation-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.recitation-play-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--green);
+  color: var(--sand);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.recitation-play-btn:hover {
+  background: var(--green-light);
+  transform: scale(1.06);
+}
+
+.recitation-progress-wrap {
+  flex: 1;
+  height: 5px;
+  background: var(--sand-dark);
+  border-radius: 50px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.recitation-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--terra);
+  border-radius: 50px;
+  transition: width 0.2s linear;
+  pointer-events: none;
+}
+
+.recitation-time {
+  font-size: 0.80rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  min-width: 36px;
+  text-align: right;
+}
+/* ============================================
+   STICKY MOBILE CTA BAR
+============================================ */
+.mobile-cta-bar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-cta-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 999;
+    background: var(--cream);
+    border-top: 1px solid var(--sand-dark);
+    padding: 12px 16px;
+    gap: 10px;
+    box-shadow: 0 -4px 20px rgba(44,74,62,0.10);
+  }
+
+  .mobile-cta-book {
+    flex: 1;
+    background: var(--terra);
+    color: var(--white);
+    text-align: center;
+    padding: 13px 16px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.02em;
+    transition: var(--transition);
+  }
+
+  .mobile-cta-book:hover {
+    background: var(--terra-light);
+  }
+
+  .mobile-cta-wa {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #25D366;
+    color: var(--white);
+    padding: 13px 18px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    transition: var(--transition);
+  }
+
+  .mobile-cta-wa:hover {
+    background: #1ebe5d;
+  }
+
+  /* Push footer up so bar doesn't overlap it */
+  .footer {
+    padding-bottom: 90px;
+  }
+}
+/* ============================================
+   ABOUT CTA STRIP
+============================================ */
+.about-cta {
+  background: var(--sand);
+  padding: 56px 0;
+}
+
+.about-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  text-align: center;
+}
+
+.about-cta-text {
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--green);
+  margin: 0;
+}
+
+.about-cta-btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+/* ============================================
+   PRICING NOTICE
+============================================ */
+.pricing-scarcity {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--terra);
+  margin-bottom: 24px;
+  letter-spacing: 0.02em;
+}
+/* ============================================
+   PRICING WHATSAPP BUTTON
+============================================ */
+.pricing-wa-btn {
+  margin-top: 12px;
+  font-size: 0.92rem;
+  color: var(--green);
+  border-color: var(--green);
+}
+
+.pricing-wa-btn:hover {
+  background: var(--green);
+  color: var(--white);
 }

@@ -159,7 +159,7 @@ if (submitBtn) {
   submitBtn.addEventListener('click', async () => {
     const name = document.getElementById('res-name').value.trim();
     const email = document.getElementById('res-email').value.trim();
-    const whatsapp = document.getElementById('res-whatsapp').value.trim();
+    const whatsapp = document.getElementById('res-country').value.trim();
     const agreed = document.getElementById('res-agree').checked;
 
     formError.style.display = 'none';
@@ -179,4 +179,75 @@ if (submitBtn) {
       unlockResources();
     }
   });
+  
+}
+/* ============================================
+   RECITATION AUDIO PLAYER
+============================================ */
+const audio = document.getElementById('recitationAudio');
+const playBtn = document.getElementById('recitationPlayBtn');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+const progressBar = document.getElementById('recitationProgress');
+const progressWrap = document.getElementById('recitationProgressWrap');
+const timeDisplay = document.getElementById('recitationTime');
+
+if (audio && playBtn) {
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) {
+      audio.play();
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+    } else {
+      audio.pause();
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+    }
+  });
+
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = pct + '%';
+    const mins = Math.floor(audio.currentTime / 60);
+    const secs = Math.floor(audio.currentTime % 60).toString().padStart(2, '0');
+    timeDisplay.textContent = `${mins}:${secs}`;
+  });
+
+  progressWrap.addEventListener('click', (e) => {
+    const rect = progressWrap.getBoundingClientRect();
+    const ratio = (e.clientX - rect.left) / rect.width;
+    audio.currentTime = ratio * audio.duration;
+  });
+
+  audio.addEventListener('ended', () => {
+    playIcon.style.display = 'block';
+    pauseIcon.style.display = 'none';
+    progressBar.style.width = '0%';
+    timeDisplay.textContent = '0:00';
+  });
+}
+/* ============================================
+   STICKY MOBILE CTA — hide in hero
+============================================ */
+const mobileCta = document.getElementById('mobileCta');
+
+if (mobileCta) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 500) {
+      mobileCta.style.opacity = '1';
+      mobileCta.style.pointerEvents = 'auto';
+      mobileCta.style.transform = 'translateY(0)';
+    } else {
+      mobileCta.style.opacity = '0';
+      mobileCta.style.pointerEvents = 'none';
+      mobileCta.style.transform = 'translateY(100%)';
+    }
+  });
+
+  // Initial state
+  mobileCta.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+  mobileCta.style.opacity = '0';
+  mobileCta.style.transform = 'translateY(100%)';
+  mobileCta.style.pointerEvents = 'none';
 }
